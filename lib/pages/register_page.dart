@@ -14,7 +14,14 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfirmController = TextEditingController();
   // register method
-  void register() {}
+  void registerUser() {
+    // show loading circle
+
+    // make sure passwords match
+
+    // try creating the user
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +90,10 @@ class RegisterPage extends StatelessWidget {
 
              
 
-              // register in button
+              // registerUser in button
               MyButton(
                 text: "Register",
-                onTap: register,
+                onTap: registerUser,
               ),
               const SizedBox(
                 height: 25,
