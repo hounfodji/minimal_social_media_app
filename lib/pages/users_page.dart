@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:minimal_social_media_app/components/my_back_button.dart';
+import 'package:minimal_social_media_app/components/my_list_tile.dart';
 import 'package:minimal_social_media_app/helper/helper_functions.dart';
 
 class UsersPage extends StatelessWidget {
@@ -52,9 +53,13 @@ class UsersPage extends StatelessWidget {
                         // get individual user
                         final user = users[index];
 
-                        return ListTile(
-                          title: Text(user["email"]),
-                          subtitle: Text(user["username"]),
+                        // get data from each user
+                        String username = user["username"];
+                        String userEmail = user["email"];
+
+                        return MyListTile(
+                          title: username,
+                          subtitle: userEmail,
                         );
                       })),
                 ),
