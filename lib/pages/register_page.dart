@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:minimal_social_media_app/components/my_button.dart';
@@ -41,25 +42,39 @@ class _RegisterPageState extends State<RegisterPage> {
       displayMessageToUser("Passwords don't match!", context);
     } else {
       // try creating the user
-    try {
-      // try creating the user
-      UserCredential? userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordConfirmController.text);
+      try {
+        // try creating the user
+        UserCredential? userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailController.text,
+                password: passwordController.text);
 
-      // pop loading circle
-      Navigator.pop(context);
-    }on FirebaseAuthException catch (e) {
-      // pop loading circle
-      Navigator.pop(context);
+        // create an user document and add to firestore
+        createUserDocument(userCredential);
 
-      // display error message to user
-      displayMessageToUser(e.code, context);
+        // pop loading circle
+        if (context.mounted) Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        // pop loading circle
+        Navigator.pop(context);
+
+        // display error message to user
+        displayMessageToUser(e.code, context);
+      }
     }
-    }
+  }
 
-    
+  // create an user document and collect them in firestore
+  Future<void> createUserDocument(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        "email": userCredential.user!.email,
+        "username": usernameController.text
+      });
+    }
   }
 
   @override
